@@ -1,45 +1,46 @@
-"use client";
+"use client"
 
-import { useState, useEffect, useRef, FC, useMemo } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Search, Pin, ExternalLink } from "lucide-react";
-import { useWorkflowNames } from "@/content/hooks/use-workflow-names";
-import { Repository } from "@/content/App";
-import { usePins } from "@/content/hooks/use-pins";
+import { useState, useEffect, useRef, FC, useMemo } from "react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Search, Pin } from "lucide-react"
+import { useWorkflowNames } from "@/content/hooks/use-workflow-names"
+import { Repository } from "@/content/App"
+import { usePins } from "@/content/hooks/use-pins"
+import { colors } from "@/content/theme"
 
 type SearchItem = {
-  name: string;
-  url: string;
-};
+  name: string
+  url: string
+}
 
 export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<SearchItem[]>([]);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const { loading, error, workflowNames } = useWorkflowNames(repo);
+  const [isOpen, setIsOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<SearchItem[]>([])
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const { loading, error, workflowNames } = useWorkflowNames(repo)
   const dummyData = useMemo((): SearchItem[] => {
     return (
       workflowNames?.map((name) => ({
         name,
         url: `https://github.com/${repo.owner}/${repo.repo}/actions/workflows/${name}`,
       })) ?? []
-    );
-  }, [workflowNames]);
-  const { pins, addPin, isPinned, removePin } = usePins();
+    )
+  }, [workflowNames])
+  const { pins, addPin, isPinned, removePin } = usePins()
 
-  const toggleSearch = () => setIsOpen((prev) => !prev);
+  const toggleSearch = () => setIsOpen((prev) => !prev)
 
   useEffect(() => {
     const filteredResults = dummyData
       .filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      .toSorted((a) => (isPinned(a.name) ? -1 : 1));
-    setSearchResults(filteredResults);
-  }, [searchQuery, dummyData, pins]);
+      .toSorted((a) => (isPinned(a.name) ? -1 : 1))
+    setSearchResults(filteredResults)
+  }, [searchQuery, dummyData, pins])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -47,19 +48,19 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
-        setSearchQuery("");
+        setIsOpen(false)
+        setSearchQuery("")
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
 
-  if (loading) return null;
-  if (error) return <p>Error: Something went wrong.</p>;
+  if (loading) return null
+  if (error) return <p>Error: Something went wrong.</p>
 
   return (
     <div
@@ -83,7 +84,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
         }}
       >
         <Search size={18} />
-        検索する
+        ワークフローを検索
       </Button>
       {isOpen && (
         <div
@@ -92,11 +93,11 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
             zIndex: 10,
             width: "100%",
             marginTop: "8px",
-            backgroundColor: "black",
+            backgroundColor: colors.backgroundColor,
             borderRadius: "6px",
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
             padding: "12px",
-            border: "1px solid white",
+            border: `1px solid ${colors.buttonBorderColor}`,
           }}
         >
           <div
@@ -119,6 +120,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                 style={{
                   paddingLeft: "32px",
                   fontSize: "14px",
+                  color: colors.textColor,
                 }}
               />
               <Search
@@ -128,11 +130,17 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                   left: "8px",
                   top: "50%",
                   transform: "translateY(-50%)",
-                  color: "#9CA3AF",
+                  color: colors.textColor,
                 }}
               />
             </div>
-            <Button onClick={toggleSearch} size="sm">
+            <Button
+              style={{
+                color: colors.textColor,
+              }}
+              onClick={toggleSearch}
+              size="sm"
+            >
               閉じる
             </Button>
           </div>
@@ -166,24 +174,29 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                     <Button
                       onClick={() => {
                         if (isPinned(result.name)) {
-                          removePin(result.name);
+                          removePin(result.name)
                         } else {
-                          addPin(result.name);
+                          addPin(result.name)
                         }
                       }}
                       style={{
-                        color: isPinned(result.name) ? "yellow" : "gray",
+                        color: "gray",
                         border: "none",
                         outline: "none",
                         padding: "4px",
+                        backgroundColor: "transparent",
+                        boxShadow: "none",
                       }}
                     >
-                      <Pin size={14} />
+                      <Pin
+                        fill={isPinned(result.name) ? "yellow" : "gray"}
+                        size={14}
+                      />
                     </Button>
                     <a
                       href={result.url}
                       style={{
-                        color: "white",
+                        color: colors.textColor,
                       }}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -197,7 +210,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
               <p
                 style={{
                   fontSize: "14px",
-                  color: "#6B7280",
+                  // color: "#6B7280",
                 }}
               >
                 結果が見つかりません
@@ -207,5 +220,5 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

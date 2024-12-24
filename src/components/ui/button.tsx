@@ -1,5 +1,6 @@
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { colors } from "@/content/theme"
 
 const baseStyles = {
   display: "inline-flex",
@@ -25,56 +26,20 @@ const baseStyles = {
     height: "16px",
     flexShrink: 0,
   },
-};
+}
 
 const variants = {
   default: {
-    backgroundColor: "var(--primary)",
-    color: "var(--primary-foreground)",
+    backgroundColor: colors.buttonBackgroundColor,
+    color: colors.textColor,
     boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
     "&:hover": {
-      backgroundColor: "rgba(var(--primary), 0.9)",
+      backgroundColor: `rgba(${colors.buttonBackgroundColor}, 0.9)`,
     },
+    borderColor: colors.buttonBorderColor,
+    borderWidth: "1px",
   },
-  destructive: {
-    backgroundColor: "var(--destructive)",
-    color: "var(--destructive-foreground)",
-    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-    "&:hover": {
-      backgroundColor: "rgba(var(--destructive), 0.9)",
-    },
-  },
-  outline: {
-    border: "1px solid var(--input)",
-    backgroundColor: "var(--background)",
-    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-    "&:hover": {
-      backgroundColor: "var(--accent)",
-      color: "var(--accent-foreground)",
-    },
-  },
-  secondary: {
-    backgroundColor: "var(--secondary)",
-    color: "var(--secondary-foreground)",
-    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-    "&:hover": {
-      backgroundColor: "rgba(var(--secondary), 0.8)",
-    },
-  },
-  ghost: {
-    "&:hover": {
-      backgroundColor: "var(--accent)",
-      color: "var(--accent-foreground)",
-    },
-  },
-  link: {
-    color: "var(--primary)",
-    textDecorationThickness: "4px",
-    "&:hover": {
-      textDecoration: "underline",
-    },
-  },
-};
+}
 
 const sizes = {
   default: {
@@ -96,30 +61,30 @@ const sizes = {
     height: "36px",
     width: "36px",
   },
-};
+} satisfies Record<string, React.CSSProperties>
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: keyof typeof variants;
-  size?: keyof typeof sizes;
-  asChild?: boolean;
+  variant?: keyof typeof variants
+  size?: keyof typeof sizes
+  asChild?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     { style, variant = "default", size = "default", asChild = false, ...props },
-    ref,
+    ref
   ) => {
-    const Comp = asChild ? Slot : "button";
+    const Comp = asChild ? Slot : "button"
     const combinedStyles = {
       ...baseStyles,
       ...variants[variant],
       ...sizes[size],
       ...style,
-    };
+    }
 
-    return <Comp style={combinedStyles} ref={ref} {...props} />;
-  },
-);
-Button.displayName = "Button";
+    return <Comp style={combinedStyles} ref={ref} {...props} />
+  }
+)
+Button.displayName = "Button"
 
-export { Button, type ButtonProps };
+export { Button, type ButtonProps }
