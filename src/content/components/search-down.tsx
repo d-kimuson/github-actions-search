@@ -119,6 +119,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                 style={{
                   paddingLeft: "32px",
                   fontSize: "14px",
+                  color: "#FFFFFF",
                 }}
               />
               <Search
@@ -132,7 +133,12 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                 }}
               />
             </div>
-            <Button onClick={toggleSearch} size="sm">
+            <Button onClick={toggleSearch}
+              size="sm"
+              style={{
+                color: "#FFFFFF",
+              }}
+            >
               閉じる
             </Button>
           </div>
