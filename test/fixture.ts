@@ -13,6 +13,7 @@ export const test = base.extend<{
       path.join(import.meta.dirname, "user_data"),
       {
         headless: true,
+        channel: "chromium",
         args: [
           `--disable-extensions-except=${pathToExtension}`,
           `--load-extension=${pathToExtension}`,
@@ -25,6 +26,7 @@ export const test = base.extend<{
   extensionId: async ({ context }, use) => {
     const [background] = context.serviceWorkers()
     const extensionId = background.url().split("/")[2]
+    console.log("background, extensionId", background, extensionId)
     await use(extensionId)
   },
 })
