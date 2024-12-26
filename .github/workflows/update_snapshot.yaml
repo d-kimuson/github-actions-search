@@ -39,5 +39,5 @@ jobs:
           body: |
             This PR updates the snapshots.
           branch: update-snapshots
-          base: main
-          labels: automated
+          base: ${{ github.ref_name }}
+          labels: update-snapshot
