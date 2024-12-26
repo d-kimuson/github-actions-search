@@ -7,7 +7,8 @@
     "shadcn",
     "valibot",
     "kimuson",
-    "networkidle"
+    "networkidle",
+    "softprops"
   ],
   "ignorePaths": [
     "pnpm-lock.yaml",

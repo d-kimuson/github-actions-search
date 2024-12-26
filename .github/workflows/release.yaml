@@ -1,0 +1,69 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Release type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Git configuration
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+
+      - name: Setup Node
+        uses: ./.github/actions/setup_node
+
+      - name: Build extension
+        run: pnpm build
+
+      - name: Create archive
+        run: |
+          zip -r dist.zip dist/
+
+      - name: Increment Version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm release-it \
+            --ci \
+            --increment=${{ github.event.inputs.release_type }}
+
+      - name: Push changes
+        run: |
+          git push --follow-tags
+
+      - name: Get new version
+        id: get_version
+        run: |
+          echo "new_version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.new_version }}
+          name: Release v${{ steps.get_version.outputs.new_version }}
+          draft: false
+          files: dist.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
