@@ -27,5 +27,6 @@ dist-ssr
 .webextrc
 .webextrc.*
 
-# eslint
+# linter
 .eslintcache
+.cspellcache

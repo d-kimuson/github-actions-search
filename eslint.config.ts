@@ -3,7 +3,7 @@ import eslint from "@eslint/js"
 import tsEslint from "typescript-eslint"
 // @ts-expect-error -- 型定義が提供されない
 import importPlugin from "eslint-plugin-import"
-import ununsedImports from "eslint-plugin-unused-imports"
+import unusedImports from "eslint-plugin-unused-imports"
 
 const tsconfigFiles = ["tsconfig.app.json", "tsconfig.node.json"]
 
@@ -16,7 +16,7 @@ const eslintConfig: FlatConfig.ConfigArray = [
   {
     files: ["**/*.?(c|m)js?(x)", "**/*.?(c|m)ts?(x)"],
     plugins: {
-      "unused-imports": ununsedImports,
+      "unused-imports": unusedImports,
       import: importPlugin,
     },
   },

@@ -1,0 +1,10 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": ["lefthook", "webextension", "shadcn"],
+  "ignorePaths": [
+    "pnpm-lock.yaml",
+    ".vscode/settings.json",
+    "packages/*/.eslintrc.cjs"
+  ]
+}
