@@ -1,28 +1,28 @@
-import { observeUrlChange } from "@/content/util/url-change-event";
-import { initializeApp, cleanApp } from "./initialize-app";
-import { parseRepository } from "@/content/util/parse-repository";
+import { parseRepository } from "@/content/util/parse-repository"
+import { observeUrlChange } from "@/content/util/url-change-event"
+import { initializeApp, cleanApp } from "./initialize-app"
 
-observeUrlChange();
+observeUrlChange()
 
 window.addEventListener("urlChange", () => {
-  const parsed = parseRepository(window.location.href);
+  const parsed = parseRepository(window.location.href)
 
   if (parsed === undefined) {
-    cleanApp();
-    return;
+    cleanApp()
+    return
   }
-  if (initializeApp(parsed)) return;
+  if (initializeApp(parsed)) return
 
-  let count = 0;
+  let count = 0
   const id = window.setInterval(() => {
     if (count > 5) {
-      clearInterval(id);
+      clearInterval(id)
     }
 
     if (initializeApp(parsed)) {
-      window.clearInterval(id);
+      window.clearInterval(id)
     } else {
-      count += 1;
+      count += 1
     }
-  }, 2000);
-});
+  }, 2000)
+})

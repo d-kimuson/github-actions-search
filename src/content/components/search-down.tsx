@@ -1,13 +1,14 @@
 "use client"
 
-import { useState, useEffect, useRef, FC, useMemo } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Search, Pin } from "lucide-react"
-import { useWorkflowNames } from "@/content/hooks/use-workflow-names"
-import { Repository } from "@/content/App"
+import { useState, useEffect, useRef, useMemo } from "react"
+import type { Repository } from "@/content/App"
+import type { FC } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { usePins } from "@/content/hooks/use-pins"
+import { useWorkflowNames } from "@/content/hooks/use-workflow-names"
 import { colors } from "@/content/theme"
 
 type SearchItem = {
@@ -31,7 +32,9 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
   }, [workflowNames])
   const { pins, addPin, isPinned, removePin } = usePins()
 
-  const toggleSearch = () => setIsOpen((prev) => !prev)
+  const toggleSearch = () => {
+    setIsOpen((prev) => !prev)
+  }
 
   useEffect(() => {
     const filteredResults = dummyData
@@ -46,6 +49,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
     function handleClickOutside(event: MouseEvent) {
       if (
         dropdownRef.current &&
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false)
@@ -116,7 +120,9 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
               <Input
                 placeholder="検索キーワードを入力"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value)
+                }}
                 style={{
                   paddingLeft: "32px",
                   fontSize: "14px",

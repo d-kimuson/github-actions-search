@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { Repository } from "@/content/App";
-import { LoadableState } from "@/content/util/types";
+import { useEffect, useState } from "react"
+import type { Repository } from "@/content/App"
+import type { LoadableState } from "@/content/util/types"
 
 const fetchWorkflowNames = async (repo: Repository): Promise<string[]> => {
   const response = await fetch(
@@ -12,36 +12,38 @@ const fetchWorkflowNames = async (repo: Repository): Promise<string[]> => {
       method: "GET",
       mode: "cors",
       credentials: "include",
-    },
-  );
+    }
+  )
 
-  return await response.json().then((data) => Object.keys(data));
-};
+  return await response
+    .json()
+    .then((data: Record<string, unknown>) => Object.keys(data))
+}
 
-const escapedNameRegExp = /^\"(.*?)\"$/;
-const unEscapeQuotes = (name: string) => name.replace(escapedNameRegExp, "$1");
+const escapedNameRegExp = /^"(.*?)"$/
+const unEscapeQuotes = (name: string) => name.replace(escapedNameRegExp, "$1")
 
 export const useWorkflowNames = (repo: Repository) => {
   const [workflowNamesState, setWorkflowNamesState] = useState<
     LoadableState<string[]>
-  >({ status: "idle" });
+  >({ status: "idle" })
 
   useEffect(() => {
     if (workflowNamesState.status === "idle") {
-      setWorkflowNamesState({ status: "loading" });
+      setWorkflowNamesState({ status: "loading" })
 
       void fetchWorkflowNames(repo)
         .then((workflowNames) => {
           setWorkflowNamesState({
             status: "loaded",
             value: workflowNames.map(unEscapeQuotes),
-          });
+          })
         })
-        .catch((error) => {
-          setWorkflowNamesState({ status: "error", error });
-        });
+        .catch((error: unknown) => {
+          setWorkflowNamesState({ status: "error", error })
+        })
     }
-  }, []);
+  }, [])
 
   if (
     workflowNamesState.status === "loading" ||
@@ -51,7 +53,7 @@ export const useWorkflowNames = (repo: Repository) => {
       loading: true,
       workflowNames: undefined,
       error: undefined,
-    } as const;
+    } as const
   }
 
   if (workflowNamesState.status === "error") {
@@ -59,12 +61,12 @@ export const useWorkflowNames = (repo: Repository) => {
       loading: false,
       workflowNames: undefined,
       error: workflowNamesState.error,
-    } as const;
+    } as const
   }
 
   return {
     loading: false,
     workflowNames: workflowNamesState.value,
     error: undefined,
-  } as const;
-};
+  } as const
+}
