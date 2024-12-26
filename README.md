@@ -1,41 +1,30 @@
 # github-actions-search
 
-GitHub の Actions タブが使いにくいので検索とかピン留めとかできるようにする Chrome 拡張機能です。
+Language: 英語 | [日本語](./README.ja.md)
 
-## 仕組み
+A Chrome extension that enhances GitHub's Actions tab with search and personal pinning capabilities.
 
-- Chrome Extension で actions のページであれば検索用の拡張ボタンを UI に追加します
-  - manifest で特定のページを指定しても直接そこを開いた時しかロードされないっぽいので、ページ遷移にフックして URL が actions のページだった場合に Element を追加します
-  - load イベント等が読み込みタイミング的に使いづらいので、初期ロードがガバガバで多少時間がかかります
-- 拡張機能は、ログインユーザーのセッションを使ってそのリポジトリの main ブランチの tree を読んで、.github/workflows/ 以下のファイルリストを取得します
-- 取得したファイルリストに対してインクリメンタルサーチができます
-  - `.github/workflows/ 以下のファイルリスト` が情報ソースなので、若干本家の workflow 一覧とは仕様が異なります
-  - Ex. Dependabot Alerts など workflow ファイルが存在しないものが表示されない
+This extension addresses two major pain points when working with repositories containing numerous workflows:
+
+1. the lack of search functionality in the Actions tab
+2. the limitations of GitHub's built-in workflow pinning (team-shared with a 5-pin limit).
+
+## Features
+
+- Adds incremental search for workflow files
+- Provides personal workflow pinning without the 5-pin limit
+- Integrates seamlessly with GitHub's UI by adding controls to the Actions sidebar
 
 ## Installation
 
-まだ公開する仕組みができてないので、この README に従って自前でビルドしてください
+Download the latest release from the Releases page. Chrome Web Store publication is under consideration.
 
-## 開発用セットアップ
+## How It Works
 
-.node-version に合わせたバージョンの Node.js と pnpm が必要です。
+The extension monitors page navigation and adds search functionality to the Actions tab. It fetches workflow files from `.github/workflows/` in the repository's main branch using your GitHub session.
 
-```shellscript
-$ pnpm i
-```
+Note that the workflow list might slightly differ from GitHub's native list as it's based on actual workflow files (e.g., Dependabot Alerts without workflow files won't appear).
 
-## 開発サーバーの起動
+## Contribute
 
-```shellscript
-$ pnpm dev
-```
-
-Chrome が起動するので、GitHub にログインして actions ページに遷移することで試せます。
-
-## ビルド
-
-```shellscript
-$ pnpm build
-```
-
-dist ディレクトリをそのままインストールすれば利用できます。
+Contributions are welcome! Feel free to submit issues and pull requests.
