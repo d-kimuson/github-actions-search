@@ -12,7 +12,7 @@ export const test = base.extend<{
     const context = await chromium.launchPersistentContext(
       path.join(import.meta.dirname, "user_data"),
       {
-        headless: false,
+        headless: true,
         args: [
           `--disable-extensions-except=${pathToExtension}`,
           `--load-extension=${pathToExtension}`,
