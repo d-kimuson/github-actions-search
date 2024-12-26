@@ -16,6 +16,8 @@
     "fix:eslint": "pnpm run:eslint . --fix",
     "run:prettier": "prettier --ignore-unknown --no-error-on-unmatched-pattern --cache",
     "run:eslint": "eslint --cache --no-error-on-unmatched-pattern --flag unstable_ts_config",
+    "test": "vitest --run",
+    "test:watch": "vitest",
     "setup:check-manager": "npx -y only-allow pnpm",
     "postinstall": "lefthook install"
   },
@@ -49,6 +51,7 @@
     "typescript-eslint": "^8.18.2",
     "vite": "^5.0.0",
     "vite-plugin-web-extension": "^4.0.0",
+    "vitest": "^2.1.8",
     "webextension-polyfill": "^0.10.0"
   },
   "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"

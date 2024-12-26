@@ -7,5 +7,10 @@
     "allowJs": true,
     "checkJs": true
   },
-  "include": ["eslint.config.ts", "vite.config.ts", ".prettierrc.mjs"]
+  "include": [
+    "eslint.config.ts",
+    "vite.config.ts",
+    ".prettierrc.mjs",
+    "vitest.config.ts"
+  ]
 }
