@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  test:
+  update_snapshots:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -24,10 +24,10 @@ jobs:
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
 
-      - name: Run Playwright tests
+      - name: build extension
         run: pnpm build
 
-      - name: Run Playwright tests
+      - name: Capture snapshots
         run: pnpm vrt:update
 
       - name: Create Pull Request
