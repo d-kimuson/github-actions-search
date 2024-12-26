@@ -30,3 +30,6 @@ dist-ssr
 # linter
 .eslintcache
 .cspellcache
+
+# TypeScript
+tsconfig.app.tsbuildinfo

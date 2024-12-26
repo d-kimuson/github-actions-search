@@ -28,6 +28,9 @@ jobs:
       - name: Setup Node
         uses: ./.github/actions/setup_node
 
+      - name: TypeCheck
+        run: pnpm typecheck
+
       - name: lint
         run: pnpm lint
 

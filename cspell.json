@@ -1,7 +1,7 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["lefthook", "webextension", "shadcn"],
+  "words": ["lefthook", "webextension", "shadcn", "valibot", "kimuson"],
   "ignorePaths": [
     "pnpm-lock.yaml",
     ".vscode/settings.json",

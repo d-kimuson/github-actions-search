@@ -1,5 +1,5 @@
-import { parseRepository } from "@/content/util/parse-repository"
 import { observeUrlChange } from "@/content/util/url-change-event"
+import { parseRepository } from "@/schema/repository"
 import { initializeApp, cleanApp } from "./initialize-app"
 
 observeUrlChange()
@@ -24,5 +24,5 @@ window.addEventListener("urlChange", () => {
     } else {
       count += 1
     }
-  }, 2000)
+  }, 1000)
 })

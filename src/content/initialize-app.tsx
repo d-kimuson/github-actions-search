@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import type { Repository } from "./App"
+import type { Repository } from "../schema/repository"
 import { App } from "./App"
 
 export const { initializeApp, cleanApp } = (() => {

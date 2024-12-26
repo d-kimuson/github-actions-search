@@ -1,7 +1,14 @@
-import type { Repository } from "@/content/App"
+import * as v from "valibot"
 
 const supportedUrlRegex =
   /^https:\/\/github.com\/(?<owner>[^/]+)\/(?<repo>[^/]+)\/actions$/
+
+const repositorySchema = v.object({
+  owner: v.string(),
+  repo: v.string(),
+})
+
+export type Repository = v.InferOutput<typeof repositorySchema>
 
 export const parseRepository = (url: string): Repository | undefined => {
   const matched = url.match(supportedUrlRegex)?.groups
@@ -9,8 +16,5 @@ export const parseRepository = (url: string): Repository | undefined => {
     return undefined
   }
 
-  return {
-    owner: matched.owner,
-    repo: matched.repo,
-  }
+  return v.parse(repositorySchema, matched)
 }

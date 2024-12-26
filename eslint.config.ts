@@ -11,7 +11,13 @@ const eslintConfig: FlatConfig.ConfigArray = [
   eslint.configs.recommended,
   ...tsEslint.configs.strictTypeChecked,
   {
-    ignores: [".prettierrc.mjs", "eslint.config.ts", "vite.config.ts"],
+    ignores: [
+      ".prettierrc.mjs",
+      "eslint.config.ts",
+      "vite.config.ts",
+      "vitest.config.ts",
+      // "**/*.test.ts?(x)",
+    ],
   },
   {
     files: ["**/*.?(c|m)js?(x)", "**/*.?(c|m)ts?(x)"],

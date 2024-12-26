@@ -2,13 +2,13 @@
 
 import { Search, Pin } from "lucide-react"
 import { useState, useEffect, useRef, useMemo } from "react"
-import type { Repository } from "@/content/App"
+import type { Repository } from "@/schema/repository"
 import type { FC } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { usePins } from "@/content/hooks/use-pins"
-import { useWorkflowNames } from "@/content/hooks/use-workflow-names"
+import { useWorkflowFiles } from "@/content/hooks/use-workflow-files"
 import { colors } from "@/content/theme"
 
 type SearchItem = {
@@ -21,15 +21,15 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<SearchItem[]>([])
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const { loading, error, workflowNames } = useWorkflowNames(repo)
+  const { loading, error, workflowFiles } = useWorkflowFiles(repo)
   const dummyData = useMemo((): SearchItem[] => {
     return (
-      workflowNames?.map((name) => ({
-        name,
-        url: `https://github.com/${repo.owner}/${repo.repo}/actions/workflows/${name}`,
+      workflowFiles?.map((fileName) => ({
+        name: fileName,
+        url: `https://github.com/${repo.owner}/${repo.repo}/actions/workflows/${fileName}`,
       })) ?? []
     )
-  }, [workflowNames])
+  }, [workflowFiles])
   const { pins, addPin, isPinned, removePin } = usePins()
 
   const toggleSearch = () => {

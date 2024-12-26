@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 
 const baseStyles = {
   flex: "flex",
@@ -34,7 +34,7 @@ const baseStyles = {
   "@media (min-width: 768px)": {
     fontSize: "14px",
   },
-};
+}
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ style, type, ...props }, ref) => {
@@ -45,9 +45,9 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
         ref={ref}
         {...props}
       />
-    );
-  },
-);
-Input.displayName = "Input";
+    )
+  }
+)
+Input.displayName = "Input"
 
-export { Input };
+export { Input }
