@@ -33,3 +33,6 @@ dist-ssr
 
 # TypeScript
 tsconfig.app.tsbuildinfo
+/playwright-report/
+/blob-report/
+/playwright/.cache/

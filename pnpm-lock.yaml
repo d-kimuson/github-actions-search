@@ -32,6 +32,9 @@ importers:
       "@eslint/js":
         specifier: ^9.17.0
         version: 9.17.0
+      "@playwright/test":
+        specifier: ^1.49.1
+        version: 1.49.1
       "@testing-library/dom":
         specifier: ^10.4.0
         version: 10.4.0
@@ -44,6 +47,9 @@ importers:
       "@tsconfig/strictest":
         specifier: ^2.0.5
         version: 2.0.5
+      "@types/node":
+        specifier: ^22.10.2
+        version: 22.10.2
       "@types/react":
         specifier: ^18.0.26
         version: 18.3.18
@@ -86,6 +92,9 @@ importers:
       lefthook:
         specifier: ^1.10.1
         version: 1.10.1
+      playwright:
+        specifier: ^1.49.1
+        version: 1.49.1
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -1049,6 +1058,14 @@ packages:
         integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==,
       }
     engines: { node: ">=12.4.0" }
+
+  "@playwright/test@1.49.1":
+    resolution:
+      {
+        integrity: sha512-Ky+BVzPz8pL6PQxHqNRW1k3mIyv933LML7HktS8uik0bUXNCdPhoS/kLihiO1tMf/egaJb4IutXd7UywvXEW+g==,
+      }
+    engines: { node: ">=18" }
+    hasBin: true
 
   "@pnpm/config.env-replace@1.1.0":
     resolution:
@@ -3029,6 +3046,14 @@ packages:
       }
     engines: { node: ">=10" }
 
+  fsevents@2.3.2:
+    resolution:
+      {
+        integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==,
+      }
+    engines: { node: ^8.16.0 || ^10.6.0 || >=11.0.0 }
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution:
       {
@@ -4435,6 +4460,22 @@ packages:
         integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==,
       }
     engines: { node: ">=12" }
+
+  playwright-core@1.49.1:
+    resolution:
+      {
+        integrity: sha512-BzmpVcs4kE2CH15rWfzpjzVGhWERJfmnXmniSyKeRZUs9Ws65m+RGIi7mjJK/euCegfn3i7jvqWeWyHe9y3Vgg==,
+      }
+    engines: { node: ">=18" }
+    hasBin: true
+
+  playwright@1.49.1:
+    resolution:
+      {
+        integrity: sha512-VYL8zLoNTBxVOrJBbDuRgDWa3i+mfQgDTrL8Ah9QXZ7ax4Dsj0MSq5bYgytRnDVVe+njoKnfsYkH3HzqVj5UZA==,
+      }
+    engines: { node: ">=18" }
+    hasBin: true
 
   possible-typed-array-names@1.0.0:
     resolution:
@@ -6182,6 +6223,10 @@ snapshots:
 
   "@nolyfill/is-core-module@1.0.39": {}
 
+  "@playwright/test@1.49.1":
+    dependencies:
+      playwright: 1.49.1
+
   "@pnpm/config.env-replace@1.1.0": {}
 
   "@pnpm/network.ca-file@1.0.2":
@@ -7521,6 +7566,9 @@ snapshots:
       jsonfile: 6.1.0
       universalify: 1.0.0
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -8285,6 +8333,14 @@ snapshots:
   picomatch@2.3.1: {}
 
   picomatch@4.0.2: {}
+
+  playwright-core@1.49.1: {}
+
+  playwright@1.49.1:
+    dependencies:
+      playwright-core: 1.49.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   possible-typed-array-names@1.0.0: {}
 
