@@ -26,6 +26,9 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Run Playwright tests
+        run: pnpm build
+
+      - name: Run Playwright tests
         run: pnpm vrt
 
       - uses: actions/upload-artifact@v4
