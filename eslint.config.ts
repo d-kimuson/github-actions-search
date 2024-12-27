@@ -16,7 +16,7 @@ const eslintConfig: FlatConfig.ConfigArray = [
       "eslint.config.ts",
       "vite.config.ts",
       "vitest.config.ts",
-      // "**/*.test.ts?(x)",
+      "dist",
     ],
   },
   {
