@@ -15,7 +15,6 @@ export const useWorkflowFiles = (repo: Repository) => {
   const { fetchWorkflowFiles } = useRepository()
 
   useEffect(() => {
-    console.log("defaultBranch", defaultBranch)
     if (defaultBranch === undefined) {
       return
     }

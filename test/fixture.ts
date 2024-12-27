@@ -8,7 +8,6 @@ export const test = base.extend<{
   // eslint-disable-next-line no-empty-pattern -- playwright が要求する書き方
   context: async ({}, use) => {
     const pathToExtension = path.join(import.meta.dirname, "..", "dist")
-    console.log("pathToExtension", pathToExtension)
     const context = await chromium.launchPersistentContext(
       path.join(import.meta.dirname, "user_data"),
       {
@@ -26,7 +25,6 @@ export const test = base.extend<{
   extensionId: async ({ context }, use) => {
     const [background] = context.serviceWorkers()
     const extensionId = background.url().split("/")[2]
-    console.log("background, extensionId", background, extensionId)
     await use(extensionId)
   },
 })

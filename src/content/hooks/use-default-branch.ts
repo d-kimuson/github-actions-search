@@ -18,7 +18,6 @@ export const useDefaultBranch = (repo: Repository) => {
 
       void fetchBranches(repo)
         .then(({ payload: { branches } }) => {
-          console.log("branches", branches, branches.default.name)
           setDefaultBranchState({
             status: "loaded",
             value: branches.default.name,
