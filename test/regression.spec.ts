@@ -2,7 +2,7 @@ import { test, expect } from "./fixture.js"
 
 const defaultClip = {
   x: 0,
-  y: 0,
+  y: 180,
   width: 350,
   height: 800,
 } as const
