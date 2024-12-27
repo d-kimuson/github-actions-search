@@ -1,5 +1,9 @@
 name: Create Release
 
+permissions:
+  contents: write
+  id-token: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -45,9 +49,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm release-it \
+          pnpm release-it ${{ github.event.inputs.release_type }} \
             --ci \
-            --increment=${{ github.event.inputs.release_type }}
+            --verbose \
+            --changelog
 
       - name: Push changes
         run: |
