@@ -2,8 +2,9 @@
 
 Language: [英語](./README.md) | 日本語
 
-GitHub の Actions タブにワークフローと検索機能と
-個人単位のピン留め機能を追加する Chrome 拡張機能です。
+GitHub の Actions タブにワークフローと検索機能と個人単位のピン留め機能を追加する Chrome 拡張機能です。
+
+![github-actions-search](https://github.com/user-attachments/assets/d543c3a2-0c43-4c06-af73-4cfe02e1f04a)
 
 この Chrome 拡張機能は多数の workflow を持つリポジトリにおける辛さを解消します。
 
