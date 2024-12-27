@@ -4,10 +4,11 @@ import type { Repository } from "@/schema/repository"
 const treeInfoSchema = v.record(v.string(), v.unknown())
 
 export const fetchWorkflowFiles = async (
-  repo: Repository
+  repo: Repository,
+  defaultBranch: string
 ): Promise<string[]> => {
   const response = await fetch(
-    `https://github.com/${repo.owner}/${repo.repo}/tree-commit-info/main/.github/workflows`,
+    `https://github.com/${repo.owner}/${repo.repo}/tree-commit-info/${defaultBranch}/.github/workflows`,
     {
       headers: {
         accept: "application/json",

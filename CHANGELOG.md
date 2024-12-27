@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Support repositories where a branch other than 'main' is set as the default branch
+
 ### Changed
 
 ### Removed

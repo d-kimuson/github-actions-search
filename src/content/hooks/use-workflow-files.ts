@@ -1,19 +1,29 @@
-import { useEffect, useState } from "react"
+import { atom, useAtom } from "jotai"
+import { useEffect } from "react"
 import type { LoadableState } from "@/content/util/types"
 import type { Repository } from "@/schema/repository"
+import { useDefaultBranch } from "@/content/hooks/use-default-branch"
 import { useRepository } from "@/content/repository"
 
+const workflowFilesAtom = atom<LoadableState<string[]>>({
+  status: "idle",
+})
+
 export const useWorkflowFiles = (repo: Repository) => {
-  const [workflowFilesState, setWorkflowFilesState] = useState<
-    LoadableState<string[]>
-  >({ status: "idle" })
+  const [workflowFilesState, setWorkflowFilesState] = useAtom(workflowFilesAtom)
+  const { defaultBranch } = useDefaultBranch(repo)
   const { fetchWorkflowFiles } = useRepository()
 
   useEffect(() => {
+    console.log("defaultBranch", defaultBranch)
+    if (defaultBranch === undefined) {
+      return
+    }
+
     if (workflowFilesState.status === "idle") {
       setWorkflowFilesState({ status: "loading" })
 
-      void fetchWorkflowFiles(repo)
+      void fetchWorkflowFiles(repo, "main")
         .then((workflowFiles) => {
           setWorkflowFilesState({
             status: "loaded",
@@ -24,7 +34,7 @@ export const useWorkflowFiles = (repo: Repository) => {
           setWorkflowFilesState({ status: "error", error })
         })
     }
-  }, [])
+  }, [defaultBranch, workflowFilesState.status])
 
   if (
     workflowFilesState.status === "loading" ||
