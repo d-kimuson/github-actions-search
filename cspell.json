@@ -8,7 +8,8 @@
     "valibot",
     "kimuson",
     "networkidle",
-    "softprops"
+    "softprops",
+    "vite"
   ],
   "ignorePaths": [
     "pnpm-lock.yaml",
