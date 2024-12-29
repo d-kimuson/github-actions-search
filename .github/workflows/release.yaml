@@ -11,6 +11,7 @@ on:
           - patch
           - minor
           - major
+          - none
 
 jobs:
   call_vrt:
@@ -50,26 +51,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm release-it ${{ github.event.inputs.release_type }} \
-            --ci \
-            --verbose \
-            --changelog
-
-      - name: Push changes
-        run: |
-          git push --follow-tags
-
-      - name: Get new version
-        id: get_version
-        run: |
-          echo "new_version=$(cat package.json | jq -r '.version')" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.get_version.outputs.new_version }}
-          name: Release v${{ steps.get_version.outputs.new_version }}
-          draft: false
-          files: github-actions-search-${{ steps.get_version.outputs.new_version }}.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          if [${{ github.event.inputs.release_type }} != "none"]; then
+            pnpm release-it ${{ github.event.inputs.release_type }} \
+              --ci \
+              --verbose
+          else
+            pnpm release-it \
+              --ci \
+              --verbose
+          fi
