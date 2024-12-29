@@ -6,17 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Support repositories where a branch other than 'main' is set as the default branch
+
 ### Changed
 
 ### Removed
 
 ### Fixed
-
-## [0.0.2] - 2024-12-29
-
-### Added
-
-- Support repositories where a branch other than 'main' is set as the default branch
 
 ## [0.0.1] - 2024-12-27
 
