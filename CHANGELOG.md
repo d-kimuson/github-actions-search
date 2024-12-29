@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.2
+
+### &nbsp;&nbsp;&nbsp;Features
+
+- Support repositories where a branch other than 'main' is set as the default branch &nbsp;-&nbsp; by **d-kimsuon** [<samp>(87261)</samp>](https://github.com/d-kimuson/github-actions-search/commit/87261ca)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/d-kimuson/github-actions-search/compare/v0.0.1...0.0.2)
+
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
