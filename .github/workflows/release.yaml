@@ -70,6 +70,6 @@ jobs:
           tag_name: v${{ steps.get_version.outputs.new_version }}
           name: Release v${{ steps.get_version.outputs.new_version }}
           draft: false
-          files: dist.zip
+          files: github-actions-search-${{ steps.get_version.outputs.new_version }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
