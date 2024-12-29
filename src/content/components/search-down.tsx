@@ -30,7 +30,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
       })) ?? []
     )
   }, [workflowFiles])
-  const { pins, addPin, isPinned, removePin } = usePins()
+  const { pins, addPin, isPinned, removePin } = usePins(repo)
 
   const toggleSearch = () => {
     setIsOpen((prev) => !prev)

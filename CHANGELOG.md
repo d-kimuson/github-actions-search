@@ -30,3 +30,5 @@
 ### Removed
 
 ### Fixed
+
+- Fix a bug where pinned workflows are unintentionally shared across repositories
