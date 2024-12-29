@@ -18,7 +18,7 @@ GitHub の Actions タブにワークフローと検索機能と個人単位の�
 
 ## インストール
 
-リリースページよりダウンロードしてインストールしてください。
+[リリースページ](https://github.com/d-kimuson/github-actions-search/releases/latest) よりダウンロードしてインストールしてください。
 Chrome ストアへの公開は現状未定です。
 
 ## 仕組み

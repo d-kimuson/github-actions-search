@@ -19,7 +19,8 @@ This extension addresses two major pain points when working with repositories co
 
 ## Installation
 
-Download the latest release from the Releases page. Chrome Web Store publication is under consideration.
+Download the latest release from the [latest releases page](https://github.com/d-kimuson/github-actions-search/releases/latest).
+Chrome Web Store publication is under consideration.
 
 ## How It Works
 
