@@ -9,7 +9,8 @@
     "kimuson",
     "networkidle",
     "softprops",
-    "vite"
+    "vite",
+    "kimsuon"
   ],
   "ignorePaths": [
     "pnpm-lock.yaml",
