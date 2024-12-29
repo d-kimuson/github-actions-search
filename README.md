@@ -30,3 +30,5 @@ Note that the workflow list might slightly differ from GitHub's native list as i
 ## Contribute
 
 Contributions are welcome! Feel free to submit issues and pull requests.
+
+See [docs/development.md](./docs/development.md).
