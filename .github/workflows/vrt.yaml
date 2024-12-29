@@ -1,15 +1,6 @@
 name: Visual Regression Tests
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - package.json
-      - pnpm-lock.yaml
-      - manifest.json
-      - playwright.config.ts
-      - vite.config.ts
-      - "src/**"
-      - "playwright/**"
+  workflow_call:
   workflow_dispatch:
 
 concurrency:

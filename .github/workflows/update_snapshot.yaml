@@ -1,5 +1,6 @@
 name: Update Snapshots
 on:
+  workflow_call:
   workflow_dispatch:
   schedule:
     - cron: "0 15 1 * *"
@@ -14,7 +15,7 @@ permissions:
 
 jobs:
   update_snapshots:
-    timeout-minutes: 60
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
