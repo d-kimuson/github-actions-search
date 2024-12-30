@@ -1,0 +1,21 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "lefthook",
+    "webextension",
+    "shadcn",
+    "valibot",
+    "kimuson",
+    "networkidle",
+    "softprops",
+    "vite",
+    "kimsuon",
+    "octocat"
+  ],
+  "ignorePaths": [
+    "pnpm-lock.yaml",
+    ".vscode/settings.json",
+    "packages/*/.eslintrc.cjs"
+  ]
+}

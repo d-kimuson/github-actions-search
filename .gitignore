@@ -26,3 +26,13 @@ dist-ssr
 # Config files
 .webextrc
 .webextrc.*
+
+# linter
+.eslintcache
+.cspellcache
+
+# TypeScript
+tsconfig.app.tsbuildinfo
+/playwright-report/
+/blob-report/
+/playwright/.cache/

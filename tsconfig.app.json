@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false,
+    "resolveJsonModule": true,
+    "noEmit": true,
+
+    // linter 責務のルールを無効化
+    "noImplicitReturns": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": false,
+
+    // module 解決オプション
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    // react
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ESNext",
+
+    // shadcn-ui
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

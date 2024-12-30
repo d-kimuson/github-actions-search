@@ -1,5 +1,5 @@
-import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
+import * as React from "react"
 import { colors } from "@/content/theme"
 
 const baseStyles = {
@@ -63,11 +63,11 @@ const sizes = {
   },
 } satisfies Record<string, React.CSSProperties>
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonProps = {
   variant?: keyof typeof variants
   size?: keyof typeof sizes
   asChild?: boolean
-}
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (

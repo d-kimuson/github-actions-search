@@ -1,9 +1,18 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@tsconfig/node22/tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": true
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "eslint.config.ts",
+    "vite.config.ts",
+    ".prettierrc.mjs",
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "test/"
+  ]
 }

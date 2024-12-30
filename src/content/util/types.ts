@@ -1,15 +1,15 @@
 export type LoadableState<T> =
   | {
-      status: "idle";
+      status: "idle"
     }
   | {
-      status: "loading";
+      status: "loading"
     }
   | {
-      status: "loaded";
-      value: T;
+      status: "loaded"
+      value: T
     }
   | {
-      status: "error";
-      error: unknown;
-    };
+      status: "error"
+      error: unknown
+    }

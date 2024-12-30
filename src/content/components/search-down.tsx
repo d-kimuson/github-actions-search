@@ -1,13 +1,14 @@
 "use client"
 
-import { useState, useEffect, useRef, FC, useMemo } from "react"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Search, Pin } from "lucide-react"
-import { useWorkflowNames } from "@/content/hooks/use-workflow-names"
-import { Repository } from "@/content/App"
+import { useState, useEffect, useRef, useMemo } from "react"
+import type { Repository } from "@/schema/repository"
+import type { FC } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { usePins } from "@/content/hooks/use-pins"
+import { useWorkflowFiles } from "@/content/hooks/use-workflow-files"
 import { colors } from "@/content/theme"
 
 type SearchItem = {
@@ -19,19 +20,38 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<SearchItem[]>([])
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const { loading, error, workflowNames } = useWorkflowNames(repo)
+  const { loading, error, workflowFiles } = useWorkflowFiles(repo)
   const dummyData = useMemo((): SearchItem[] => {
     return (
-      workflowNames?.map((name) => ({
-        name,
-        url: `https://github.com/${repo.owner}/${repo.repo}/actions/workflows/${name}`,
+      workflowFiles?.map((fileName) => ({
+        name: fileName,
+        url: `https://github.com/${repo.owner}/${repo.repo}/actions/workflows/${fileName}`,
       })) ?? []
     )
-  }, [workflowNames])
-  const { pins, addPin, isPinned, removePin } = usePins()
+  }, [workflowFiles])
+  const { pins, addPin, isPinned, removePin } = usePins(repo)
 
-  const toggleSearch = () => setIsOpen((prev) => !prev)
+  const toggleSearch = () => {
+    setIsOpen((prev) => !prev)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prevIndex) => (prevIndex + 1) % searchResults.length)
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex(
+        (prevIndex) =>
+          (prevIndex - 1 + searchResults.length) % searchResults.length
+      )
+    } else if (e.key === "Enter") {
+      const selectedResult = searchResults[selectedIndex]
+      if (selectedResult) {
+        window.open(selectedResult.url, "_blank")
+      }
+    }
+  }
 
   useEffect(() => {
     const filteredResults = dummyData
@@ -46,6 +66,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
     function handleClickOutside(event: MouseEvent) {
       if (
         dropdownRef.current &&
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false)
@@ -58,6 +79,22 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
+
+  useEffect(() => {
+    if (isOpen) {
+      const inputElement = dropdownRef.current?.querySelector("input")
+      if (inputElement) {
+        inputElement.focus()
+      }
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [searchResults.length, selectedIndex])
 
   if (loading) return null
   if (error) return <p>Error: Something went wrong.</p>
@@ -116,7 +153,9 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
               <Input
                 placeholder="検索キーワードを入力"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value)
+                }}
                 style={{
                   paddingLeft: "32px",
                   fontSize: "14px",
@@ -161,7 +200,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                   gap: "8px",
                 }}
               >
-                {searchResults.map((result) => (
+                {searchResults.map((result, index) => (
                   <li
                     key={result.name}
                     style={{
@@ -169,6 +208,11 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                       display: "flex",
                       alignItems: "center",
                       // justifyContent: "space-between",
+                      border:
+                        selectedIndex === index
+                          ? "1px solid #E5E7EB"
+                          : "1px solid transparent",
+                      borderRadius: "4px",
                     }}
                   >
                     <Button

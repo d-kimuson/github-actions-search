@@ -1,0 +1,46 @@
+name: Update Snapshots
+on:
+  workflow_call:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 15 1 * *"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update_snapshots:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: ./.github/actions/setup_node
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: build extension
+        run: pnpm build
+
+      - name: Capture snapshots
+        run: pnpm vrt:update
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update snapshots
+          title: "[Auto Generated] Update snapshots"
+          body: |
+            This PR updates the snapshots.
+          branch: update-snapshots
+          base: ${{ github.ref_name }}
+          labels: update-snapshot
