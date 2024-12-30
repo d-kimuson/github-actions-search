@@ -54,9 +54,11 @@ jobs:
           if [${{ github.event.inputs.release_type }} != "none"]; then
             pnpm release-it ${{ github.event.inputs.release_type }} \
               --ci \
+              --no-npm \
               --verbose
           else
             pnpm release-it \
               --ci \
+              --no-npm \
               --verbose
           fi
