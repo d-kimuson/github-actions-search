@@ -22,7 +22,7 @@ export const useWorkflowFiles = (repo: Repository) => {
     if (workflowFilesState.status === "idle") {
       setWorkflowFilesState({ status: "loading" })
 
-      void fetchWorkflowFiles(repo, "main")
+      void fetchWorkflowFiles(repo, defaultBranch)
         .then((workflowFiles) => {
           setWorkflowFilesState({
             status: "loaded",
