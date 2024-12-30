@@ -20,6 +20,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<SearchItem[]>([])
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const { loading, error, workflowFiles } = useWorkflowFiles(repo)
   const dummyData = useMemo((): SearchItem[] => {
@@ -34,6 +35,22 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
 
   const toggleSearch = () => {
     setIsOpen((prev) => !prev)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prevIndex) => (prevIndex + 1) % searchResults.length)
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex(
+        (prevIndex) =>
+          (prevIndex - 1 + searchResults.length) % searchResults.length
+      )
+    } else if (e.key === "Enter") {
+      const selectedResult = searchResults[selectedIndex]
+      if (selectedResult) {
+        window.open(selectedResult.url, "_blank")
+      }
+    }
   }
 
   useEffect(() => {
@@ -62,6 +79,13 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [searchResults.length, selectedIndex])
 
   if (loading) return null
   if (error) return <p>Error: Something went wrong.</p>
@@ -167,7 +191,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                   gap: "8px",
                 }}
               >
-                {searchResults.map((result) => (
+                {searchResults.map((result, index) => (
                   <li
                     key={result.name}
                     style={{
@@ -175,6 +199,11 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                       display: "flex",
                       alignItems: "center",
                       // justifyContent: "space-between",
+                      border:
+                        selectedIndex === index
+                          ? "1px solid #E5E7EB"
+                          : "1px solid transparent",
+                      borderRadius: "4px",
                     }}
                   >
                     <Button
