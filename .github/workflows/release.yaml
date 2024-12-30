@@ -52,7 +52,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [${{ github.event.inputs.release_type }} != "none"]; then
-            pnpm release-it ${{ github.event.inputs.release_type }} \
+            pnpm release-it \
+              --increment=${{ github.event.inputs.release_type }} \
               --ci \
               --no-npm \
               --npm.skipChecks \
