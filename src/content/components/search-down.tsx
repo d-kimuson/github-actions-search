@@ -81,6 +81,15 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
   }, [])
 
   useEffect(() => {
+    if (isOpen) {
+      const inputElement = dropdownRef.current?.querySelector("input")
+      if (inputElement) {
+        inputElement.focus()
+      }
+    }
+  }, [isOpen])
+
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown)
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
