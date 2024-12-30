@@ -51,7 +51,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if ["${{ github.event.inputs.release_type }}" != "none"]; then
+          if [[ "${{ github.event.inputs.release_type }}" != "none" ]]; then
             pnpm release-it \
               --increment=${{ github.event.inputs.release_type }} \
               --ci \
