@@ -63,6 +63,15 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (isOpen) {
+      const inputElement = dropdownRef.current?.querySelector("input")
+      if (inputElement) {
+        inputElement.focus()
+      }
+    }
+  }, [isOpen])
+
   if (loading) return null
   if (error) return <p>Error: Something went wrong.</p>
 
