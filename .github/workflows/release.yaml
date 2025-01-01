@@ -56,12 +56,10 @@ jobs:
               --increment=${{ github.event.inputs.release_type }} \
               --ci \
               --no-npm \
-              --npm.skipChecks \
               --verbose
           else
             pnpm release-it \
               --ci \
               --no-npm \
-              --npm.skipChecks \
               --verbose
           fi
