@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.0.3
+
+### &nbsp;&nbsp;&nbsp;Features
+
+- Auto focus on input erea &nbsp;-&nbsp; by **kimukei** [<samp>(51358)</samp>](https://github.com/d-kimuson/github-actions-search/commit/51358d3)
+- Add handleKeyDown EventListener to select item &nbsp;-&nbsp; by **kimukei** [<samp>(4bb18)</samp>](https://github.com/d-kimuson/github-actions-search/commit/4bb1821)
+
+### &nbsp;&nbsp;&nbsp;Bug Fixes
+
+- Fetch the default branch name &nbsp;-&nbsp; by **kimukei** [<samp>(a2a38)</samp>](https://github.com/d-kimuson/github-actions-search/commit/a2a386e)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/d-kimuson/github-actions-search/compare/v0.0.2...0.0.3)
+
 ## 0.0.2
 
 ### &nbsp;&nbsp;&nbsp;Features
