@@ -11,8 +11,10 @@
     "softprops",
     "vite",
     "kimsuon",
-    "octocat"
+    "octocat",
+    "kimukei"
   ],
+  "ignoreWords": ["erea"],
   "ignorePaths": [
     "pnpm-lock.yaml",
     ".vscode/settings.json",
