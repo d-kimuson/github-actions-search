@@ -3,6 +3,11 @@
   "version": "0.0.3",
   "type": "module",
   "license": "MIT",
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "rimraf dist && vite build",
@@ -47,7 +52,9 @@
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/utils": "^8.18.2",
     "@vitejs/plugin-react": "^4.2.1",
+    "commitizen": "^4.3.1",
     "cspell": "^8.17.1",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.17.0",
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import": "^2.31.0",

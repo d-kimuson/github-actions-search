@@ -2,17 +2,18 @@
   "version": "0.2",
   "language": "en",
   "words": [
-    "lefthook",
-    "webextension",
-    "shadcn",
-    "valibot",
-    "kimuson",
-    "networkidle",
-    "softprops",
-    "vite",
+    "commitizen",
     "kimsuon",
+    "kimukei",
+    "kimuson",
+    "lefthook",
+    "networkidle",
     "octocat",
-    "kimukei"
+    "shadcn",
+    "softprops",
+    "valibot",
+    "vite",
+    "webextension"
   ],
   "ignoreWords": ["erea"],
   "ignorePaths": [

@@ -25,3 +25,10 @@ pre-commit:
         - rebase
       run: |
         pnpm run:eslint --fix {staged_files}
+
+prepare-commit-msg:
+  parallel: true
+  scripts:
+    "commitizen.sh":
+      interactive: true
+      runner: sh
