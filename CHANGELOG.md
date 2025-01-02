@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.4
+
+_No significant changes_
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/d-kimuson/github-actions-search/compare/v0.0.3...0.0.4)
+
 ## 0.0.3
 
 ### &nbsp;&nbsp;&nbsp;Features
