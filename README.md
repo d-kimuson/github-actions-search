@@ -4,7 +4,8 @@ Language: 英語 | [日本語](./README.ja.md)
 
 A Chrome extension that enhances GitHub's Actions tab with search and personal pinning capabilities.
 
-![github-actions-search](https://github.com/user-attachments/assets/1d6ee83d-0247-4a73-838c-7815ed0aab58)
+![github-actions-search](https://github.com/user-attachments/assets/9d9a0b5a-9e2f-4fd8-909d-5f9647f58716)
+
 
 This extension addresses two major pain points when working with repositories containing numerous workflows:
 
