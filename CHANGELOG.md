@@ -25,13 +25,8 @@
 
 ### Added
 
-- feat: feat: auto focus on input area [#7](https://github.com/d-kimuson/github-actions-search/pull/7)
-- feat: add handleKeyDown EventListener to select item [#8](https://github.com/d-kimuson/github-actions-search/pull/8)
-
 ### Changed
 
 ### Removed
 
 ### Fixed
-
-- Fix a bug where pinned workflows are unintentionally shared across repositories
