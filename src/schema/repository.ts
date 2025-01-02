@@ -1,7 +1,7 @@
 import * as v from "valibot"
 
 const supportedUrlRegex =
-  /^https:\/\/github.com\/(?<owner>[^/]+)\/(?<repo>[^/]+)\/actions$/
+  /^https:\/\/github.com\/(?<owner>[^/]+)\/(?<repo>[^/]+)\/actions(.*)$/
 
 const repositorySchema = v.object({
   owner: v.string(),
