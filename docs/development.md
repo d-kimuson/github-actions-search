@@ -35,10 +35,8 @@ You can check extension behavior by moving [github-actions-search's actions tab]
 
 - `src/` - Source code
   - `content/` - Content scripts injected into GitHub pages
-  - `background.ts` - Service worker background script
-  - `popup.html/ts` - Extension popup UI
 - `public/` - Static assets
-- `test/` - Test files
+- `test/` - Visual Regression Test files
 - `dist/` - Build output
 
 ## Building
