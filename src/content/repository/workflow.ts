@@ -1,10 +1,10 @@
 import * as v from "valibot"
 import type { Repository } from "@/schema/repository"
 
-const treeInfoSchema = v.union([
-  v.object({ entries: v.record(v.string(), v.unknown()) }),
-  v.record(v.string(), v.unknown()),
-])
+const entriesWrappedSchema = v.object({
+  entries: v.record(v.string(), v.unknown()),
+})
+const flatSchema = v.record(v.string(), v.unknown())
 
 export const fetchWorkflowFiles = async (
   repo: Repository,
@@ -23,17 +23,20 @@ export const fetchWorkflowFiles = async (
   )
 
   return await response.json().then((data: unknown) => {
-    const parsed = v.safeParse(treeInfoSchema, data)
-    if (!parsed.success) {
+    const entriesResult = v.safeParse(entriesWrappedSchema, data)
+    if (entriesResult.success) {
+      return Object.keys(entriesResult.output.entries)
+    }
+
+    const flatResult = v.safeParse(flatSchema, data)
+    if (!flatResult.success) {
       console.error(
         "[github-actions-search] Failed to parse workflow files",
-        parsed.issues,
+        flatResult.issues,
         data
       )
       throw new Error("Failed to parse workflow files response")
     }
-    const files =
-      "entries" in parsed.output ? parsed.output.entries : parsed.output
-    return Object.keys(files)
+    return Object.keys(flatResult.output)
   })
 }
