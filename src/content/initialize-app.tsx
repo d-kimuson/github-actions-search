@@ -8,11 +8,13 @@ export const { initializeApp, cleanApp } = (() => {
 
   return {
     initializeApp: (repo: Repository): boolean => {
-      const sidebarElement = Array.from(document.querySelectorAll("h2")).find(
-        (elm) => elm.textContent === "Actions"
-      )?.parentElement?.parentElement
+      const sidebarElement = Array.from(
+        document.querySelectorAll("h2, h3")
+      ).find((elm) => elm.textContent?.trim() === "Actions")?.parentElement
+        ?.parentElement
 
       if (!sidebarElement) {
+        console.debug("[github-actions-search] sidebar not found")
         return false
       }
 
