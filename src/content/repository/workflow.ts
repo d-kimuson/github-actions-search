@@ -1,7 +1,10 @@
 import * as v from "valibot"
 import type { Repository } from "@/schema/repository"
 
-const treeInfoSchema = v.record(v.string(), v.unknown())
+const entriesWrappedSchema = v.object({
+  entries: v.record(v.string(), v.unknown()),
+})
+const flatSchema = v.record(v.string(), v.unknown())
 
 export const fetchWorkflowFiles = async (
   repo: Repository,
@@ -19,7 +22,21 @@ export const fetchWorkflowFiles = async (
     }
   )
 
-  return await response
-    .json()
-    .then((data: unknown) => Object.keys(v.parse(treeInfoSchema, data)))
+  return await response.json().then((data: unknown) => {
+    const entriesResult = v.safeParse(entriesWrappedSchema, data)
+    if (entriesResult.success) {
+      return Object.keys(entriesResult.output.entries)
+    }
+
+    const flatResult = v.safeParse(flatSchema, data)
+    if (!flatResult.success) {
+      console.error(
+        "[github-actions-search] Failed to parse workflow files",
+        flatResult.issues,
+        data
+      )
+      throw new Error("Failed to parse workflow files response")
+    }
+    return Object.keys(flatResult.output)
+  })
 }

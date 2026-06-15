@@ -6,7 +6,6 @@ A Chrome extension that enhances GitHub's Actions tab with search and personal p
 
 ![github-actions-search](https://github.com/user-attachments/assets/9d9a0b5a-9e2f-4fd8-909d-5f9647f58716)
 
-
 This extension addresses two major pain points when working with repositories containing numerous workflows:
 
 1. the lack of search functionality in the Actions tab
