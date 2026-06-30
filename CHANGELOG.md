@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.7
+
+### &nbsp;&nbsp;&nbsp;Performance
+
+- Improve workflow search startup &nbsp;-&nbsp; by **d-kimsuon** [<samp>(5c751)</samp>](https://github.com/d-kimuson/github-actions-search/commit/5c75174)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/d-kimuson/github-actions-search/compare/v0.0.6...0.0.7)
+
 ## 0.0.6
 
 ### &nbsp;&nbsp;&nbsp;Bug Fixes
