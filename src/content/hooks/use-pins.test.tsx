@@ -1,4 +1,4 @@
-import { act, renderHook } from "@testing-library/react"
+import { act, renderHook } from "@testing-library/preact"
 import { describe, expect, it } from "vitest"
 import { usePins } from "@/content/hooks/use-pins"
 import {
@@ -37,7 +37,7 @@ describe("usePins", () => {
         </LocalStorageProvider>
       ),
     })
-    act(() => {
+    void act(() => {
       result.current.addPin("sample2.yaml")
     })
 
@@ -96,7 +96,7 @@ describe("usePins", () => {
     expect(repo2Result.current.pins).toStrictEqual(["workflow2.yaml"])
 
     // when: repo1 に新しいピンを追加
-    act(() => {
+    void act(() => {
       repo1Result.current.addPin("workflow1-new.yaml")
     })
 

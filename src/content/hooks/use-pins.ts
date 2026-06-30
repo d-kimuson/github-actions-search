@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "preact/hooks"
 import * as v from "valibot"
 import { useLocalStorage } from "@/content/util/local-storage"
 

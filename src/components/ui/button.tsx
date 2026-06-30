@@ -1,45 +1,30 @@
-import { Slot } from "@radix-ui/react-slot"
-import * as React from "react"
+import { forwardRef } from "preact/compat"
+import type { ComponentChildren } from "preact"
 import { colors } from "@/content/theme"
+
+type Style = Record<string, string | number>
 
 const baseStyles = {
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
   gap: "8px",
-  whiteSpace: "nowrap" as const,
+  whiteSpace: "nowrap",
   borderRadius: "6px",
   fontSize: "14px",
   fontWeight: 500,
   transition: "colors 200ms ease-in-out",
-  "&:focus-visible": {
-    outline: "none",
-    ring: "1px solid var(--ring)",
-  },
-  "&:disabled": {
-    pointerEvents: "none",
-    opacity: 0.5,
-  },
-  "& svg": {
-    pointerEvents: "none",
-    width: "16px",
-    height: "16px",
-    flexShrink: 0,
-  },
-}
+} satisfies Style
 
 const variants = {
   default: {
     backgroundColor: colors.buttonBackgroundColor,
     color: colors.textColor,
     boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
-    "&:hover": {
-      backgroundColor: `rgba(${colors.buttonBackgroundColor}, 0.9)`,
-    },
     borderColor: colors.buttonBorderColor,
     borderWidth: "1px",
   },
-}
+} satisfies Record<string, Style>
 
 const sizes = {
   default: {
@@ -61,20 +46,31 @@ const sizes = {
     height: "36px",
     width: "36px",
   },
-} satisfies Record<string, React.CSSProperties>
+} satisfies Record<string, Style>
 
 type ButtonProps = {
-  variant?: keyof typeof variants
+  "aria-busy"?: boolean
+  "aria-label"?: string
+  children?: ComponentChildren
+  onClick?: () => void
   size?: keyof typeof sizes
-  asChild?: boolean
-} & React.ButtonHTMLAttributes<HTMLButtonElement>
+  style?: Style
+  variant?: keyof typeof variants
+}
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { style, variant = "default", size = "default", asChild = false, ...props },
+    {
+      "aria-busy": ariaBusy,
+      "aria-label": ariaLabel,
+      children,
+      onClick,
+      style,
+      variant = "default",
+      size = "default",
+    },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button"
     const combinedStyles = {
       ...baseStyles,
       ...variants[variant],
@@ -82,7 +78,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...style,
     }
 
-    return <Comp style={combinedStyles} ref={ref} {...props} />
+    return (
+      <button
+        aria-busy={ariaBusy}
+        aria-label={ariaLabel}
+        onClick={onClick}
+        ref={ref}
+        style={combinedStyles}
+        type="button"
+      >
+        {children}
+      </button>
+    )
   }
 )
 Button.displayName = "Button"

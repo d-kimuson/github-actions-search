@@ -1,9 +1,9 @@
 "use client"
 
-import { Search, Pin } from "lucide-react"
-import { useState, useEffect, useRef, useMemo } from "react"
+import { Pin, Search } from "lucide-preact"
+import { useEffect, useMemo, useRef, useState } from "preact/hooks"
 import type { Repository } from "@/schema/repository"
-import type { FC } from "react"
+import type { FunctionalComponent } from "preact"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -16,62 +16,65 @@ type SearchItem = {
   url: string
 }
 
-export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
+const createWorkflowUrl = (repo: Repository, fileName: string) =>
+  `https://github.com/${repo.owner}/${repo.repo}/actions/workflows/${fileName}`
+
+export const SearchDropdown: FunctionalComponent<{ repo: Repository }> = ({
+  repo,
+}) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [shouldLoadWorkflowFiles, setShouldLoadWorkflowFiles] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [searchResults, setSearchResults] = useState<SearchItem[]>([])
   const [selectedIndex, setSelectedIndex] = useState(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const { loading, error, workflowFiles } = useWorkflowFiles(repo)
-  const dummyData = useMemo((): SearchItem[] => {
+  const { loading, error, workflowFiles } = useWorkflowFiles(repo, {
+    enabled: shouldLoadWorkflowFiles,
+  })
+  const { pins, addPin, isPinned, removePin } = usePins(repo)
+
+  const workflowItems = useMemo((): SearchItem[] => {
     return (
       workflowFiles?.map((fileName) => ({
         name: fileName,
-        url: `https://github.com/${repo.owner}/${repo.repo}/actions/workflows/${fileName}`,
+        url: createWorkflowUrl(repo, fileName),
       })) ?? []
     )
-  }, [workflowFiles])
-  const { pins, addPin, isPinned, removePin } = usePins(repo)
+  }, [repo, workflowFiles])
+
+  const searchResults = useMemo(() => {
+    const normalizedSearchQuery = searchQuery.toLowerCase()
+    return workflowItems
+      .filter((item) => item.name.toLowerCase().includes(normalizedSearchQuery))
+      .toSorted((a, b) => {
+        const aPinned = isPinned(a.name)
+        const bPinned = isPinned(b.name)
+        if (aPinned === bPinned) return a.name.localeCompare(b.name)
+        return aPinned ? -1 : 1
+      })
+  }, [isPinned, searchQuery, workflowItems, pins])
 
   const toggleSearch = () => {
+    setShouldLoadWorkflowFiles(true)
     setIsOpen((prev) => !prev)
   }
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "ArrowDown") {
-      setSelectedIndex((prevIndex) => (prevIndex + 1) % searchResults.length)
-    } else if (e.key === "ArrowUp") {
-      setSelectedIndex(
-        (prevIndex) =>
-          (prevIndex - 1 + searchResults.length) % searchResults.length
-      )
-    } else if (e.key === "Enter") {
-      const selectedResult = searchResults[selectedIndex]
-      if (selectedResult) {
-        window.open(selectedResult.url, "_blank")
-      }
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      setShouldLoadWorkflowFiles(true)
+    }, 0)
+
+    return () => {
+      window.clearTimeout(timerId)
     }
-  }
+  }, [])
 
   useEffect(() => {
-    const filteredResults = dummyData
-      .filter((item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-      .toSorted((a) => (isPinned(a.name) ? -1 : 1))
-    setSearchResults(filteredResults)
-  }, [searchQuery, dummyData, pins])
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!(event.target instanceof Node)) return
+      if (dropdownRef.current?.contains(event.target)) return
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false)
-        setSearchQuery("")
-      }
+      setIsOpen(false)
+      setSearchQuery("")
     }
 
     document.addEventListener("mousedown", handleClickOutside)
@@ -81,23 +84,54 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
   }, [])
 
   useEffect(() => {
-    if (isOpen) {
-      const inputElement = dropdownRef.current?.querySelector("input")
-      if (inputElement) {
-        inputElement.focus()
-      }
-    }
+    if (!isOpen) return
+
+    const inputElement = dropdownRef.current?.querySelector("input")
+    inputElement?.focus()
   }, [isOpen])
 
   useEffect(() => {
+    if (selectedIndex < searchResults.length) return
+
+    setSelectedIndex(0)
+  }, [searchResults.length, selectedIndex])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (searchResults.length === 0) return
+
+      if (event.key === "ArrowDown") {
+        event.preventDefault()
+        setSelectedIndex((prevIndex) => (prevIndex + 1) % searchResults.length)
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault()
+        setSelectedIndex(
+          (prevIndex) =>
+            (prevIndex - 1 + searchResults.length) % searchResults.length
+        )
+      } else if (event.key === "Enter") {
+        const selectedResult = searchResults[selectedIndex]
+        if (selectedResult) {
+          window.open(selectedResult.url, "_blank")
+        }
+      }
+    }
+
     window.addEventListener("keydown", handleKeyDown)
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [searchResults.length, selectedIndex])
+  }, [isOpen, searchResults, selectedIndex])
 
-  if (loading) return null
-  if (error) return <p>Error: Something went wrong.</p>
+  const statusMessage = (() => {
+    if (error) return "ワークフロー一覧の読み込みに失敗しました"
+    if (!shouldLoadWorkflowFiles || loading)
+      return "ワークフロー一覧を読み込み中..."
+    if (searchResults.length === 0) return "結果が見つかりません"
+    return undefined
+  })()
 
   return (
     <div
@@ -110,6 +144,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
       ref={dropdownRef}
     >
       <Button
+        aria-busy={loading}
         onClick={toggleSearch}
         style={{
           width: "100%",
@@ -153,9 +188,7 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
               <Input
                 placeholder="検索キーワードを入力"
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value)
-                }}
+                onValueInput={setSearchQuery}
                 style={{
                   paddingLeft: "32px",
                   fontSize: "14px",
@@ -192,12 +225,25 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
               padding: "8px",
             }}
           >
-            {searchResults.length > 0 ? (
+            {statusMessage !== undefined ? (
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: colors.textColor,
+                  margin: 0,
+                }}
+              >
+                {statusMessage}
+              </p>
+            ) : (
               <ul
                 style={{
                   display: "flex",
-                  flexDirection: "column" as const,
+                  flexDirection: "column",
                   gap: "8px",
+                  margin: 0,
+                  padding: 0,
+                  listStyle: "none",
                 }}
               >
                 {searchResults.map((result, index) => (
@@ -207,7 +253,6 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                       fontSize: "14px",
                       display: "flex",
                       alignItems: "center",
-                      // justifyContent: "space-between",
                       border:
                         selectedIndex === index
                           ? "1px solid #E5E7EB"
@@ -216,6 +261,11 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                     }}
                   >
                     <Button
+                      aria-label={
+                        isPinned(result.name)
+                          ? `${result.name} のピン留めを外す`
+                          : `${result.name} をピン留めする`
+                      }
                       onClick={() => {
                         if (isPinned(result.name)) {
                           removePin(result.name)
@@ -250,15 +300,6 @@ export const SearchDropdown: FC<{ repo: Repository }> = ({ repo }) => {
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p
-                style={{
-                  fontSize: "14px",
-                  // color: "#6B7280",
-                }}
-              >
-                結果が見つかりません
-              </p>
             )}
           </ScrollArea>
         </div>

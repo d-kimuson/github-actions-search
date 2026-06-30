@@ -2,27 +2,43 @@ import { observeUrlChange } from "@/content/util/url-change-event"
 import { parseRepository } from "@/schema/repository"
 import { initializeApp, cleanApp } from "./initialize-app"
 
-observeUrlChange()
+let retryTimerId: number | undefined
 
-window.addEventListener("urlChange", () => {
+const clearRetryTimer = () => {
+  if (retryTimerId === undefined) return
+
+  window.clearInterval(retryTimerId)
+  retryTimerId = undefined
+}
+
+const initializeActionsSearch = () => {
+  clearRetryTimer()
+
   const parsed = parseRepository(window.location.href)
 
   if (parsed === undefined) {
     cleanApp()
     return
   }
+
   if (initializeApp(parsed)) return
 
   let count = 0
-  const id = window.setInterval(() => {
+  retryTimerId = window.setInterval(() => {
     if (count > 5) {
-      clearInterval(id)
+      clearRetryTimer()
+      return
     }
 
     if (initializeApp(parsed)) {
-      window.clearInterval(id)
+      clearRetryTimer()
     } else {
       count += 1
     }
   }, 1000)
-})
+}
+
+observeUrlChange()
+initializeActionsSearch()
+
+window.addEventListener("urlChange", initializeActionsSearch)
