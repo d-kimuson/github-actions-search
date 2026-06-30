@@ -1,0 +1,28 @@
+defaults:
+  changed: untracked,unstaged,staged,branch:main
+  target: all
+checks:
+  - name: oxfmt
+    match: \.(m|c)?(j|t)sx?$|\.jsonc?$|\.ya?ml$|\.md$
+    group: format
+    command: pnpm exec oxfmt --write --ignore-path .gitignore --no-error-on-unmatched-pattern {{ ctx.CHANGED_FILES }}
+  - name: oxlint
+    match: \.(m|c)?tsx?$
+    group: lint
+    command: pnpm exec oxlint --fix --type-aware --import-plugin --react-plugin --jsx-a11y-plugin --promise-plugin --vitest-plugin --ignore-path .gitignore --no-error-on-unmatched-pattern {{ ctx.CHANGED_FILES }}
+  - name: cspell
+    match: \.(m|c)?(j|t)sx?$|\.jsonc?$|\.ya?ml$|\.md$
+    group: lint
+    command: pnpm exec cspell lint --no-must-find-files --gitignore --cache {{ ctx.CHANGED_FILES }}
+  - name: typecheck
+    match: \.(m|c)?tsx?$|package\.json$|pnpm-lock\.yaml$|tsconfig\.json$
+    group: typecheck
+    command: pnpm exec tsgo -p . --noEmit
+  - name: vitest-related
+    match: \.(m|c)?tsx?$
+    group: test
+    command: pnpm exec vitest related --run --passWithNoTests {{ ctx.CHANGED_FILES }}
+  - name: build
+    match: ^src/|^manifest\.json$|^vite\.config\.ts$|^tsconfig\.json$|^package\.json$|^pnpm-lock\.yaml$
+    group: build
+    command: pnpm build

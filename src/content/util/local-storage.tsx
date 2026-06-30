@@ -1,6 +1,9 @@
-import { createContext } from "preact"
+import {
+  createContext,
+  type ComponentChildren,
+  type FunctionalComponent,
+} from "preact"
 import { useContext } from "preact/hooks"
-import type { ComponentChildren, FunctionalComponent } from "preact"
 
 export type Storage = Pick<
   globalThis.Storage,
