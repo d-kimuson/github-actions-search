@@ -1,10 +1,13 @@
-import React from "react"
-import ReactDOM from "react-dom/client"
+import { render } from "preact"
 import type { Repository } from "../schema/repository"
 import { App } from "./App"
 
+const rootId = "crx-root"
+
+const getRepoKey = (repo: Repository) => `${repo.owner}/${repo.repo}`
+
 export const { initializeApp, cleanApp } = (() => {
-  let reactRoot: ReactDOM.Root | null = null
+  let rootElement: HTMLDivElement | null = null
 
   return {
     initializeApp: (repo: Repository): boolean => {
@@ -18,25 +21,28 @@ export const { initializeApp, cleanApp } = (() => {
         return false
       }
 
-      const root = document.createElement("div")
-      root.id = "crx-root"
-      sidebarElement.prepend(root)
+      const existingRoot = document.getElementById(rootId)
+      rootElement =
+        existingRoot instanceof HTMLDivElement
+          ? existingRoot
+          : document.createElement("div")
+      rootElement.id = rootId
 
-      reactRoot = ReactDOM.createRoot(root)
-      reactRoot.render(
-        <React.StrictMode>
-          <App repo={repo} />
-        </React.StrictMode>
-      )
+      if (!rootElement.isConnected) {
+        sidebarElement.prepend(rootElement)
+      }
+
+      render(<App key={getRepoKey(repo)} repo={repo} />, rootElement)
 
       return true
     },
 
     cleanApp: () => {
-      if (reactRoot === null) return
+      if (rootElement === null) return
 
-      reactRoot.unmount()
-      reactRoot = null
+      render(null, rootElement)
+      rootElement.remove()
+      rootElement = null
     },
   }
 })()

@@ -1,8 +1,21 @@
-import { setTimeout } from "node:timers/promises"
-import { renderHook, act } from "@testing-library/react"
-import { describe, it, vi, expect } from "vitest"
+import { renderHook, waitFor } from "@testing-library/preact"
+import { describe, expect, it, vi } from "vitest"
 import { useWorkflowFiles } from "@/content/hooks/use-workflow-files"
 import { MockRepositoryProvider } from "@/content/repository"
+
+const response = {
+  payload: {
+    branches: {
+      default: {
+        name: "main",
+        isDefault: true,
+        author: {
+          name: "d-kimuson",
+        },
+      },
+    },
+  },
+}
 
 describe("useWorkflowFiles", () => {
   const repo = { owner: "d-kimuson", repo: "github-actions-search" }
@@ -12,21 +25,7 @@ describe("useWorkflowFiles", () => {
       wrapper: ({ children }) => (
         <MockRepositoryProvider
           repository={{
-            fetchBranches: vi.fn(() =>
-              Promise.resolve({
-                payload: {
-                  branches: {
-                    default: {
-                      name: "main",
-                      isDefault: true,
-                      author: {
-                        name: "d-kimuson",
-                      },
-                    },
-                  },
-                },
-              })
-            ),
+            fetchBranches: vi.fn(() => Promise.resolve(response)),
             fetchWorkflowFiles: vi.fn(() => Promise.resolve(["sample.yaml"])),
           }}
         >
@@ -47,6 +46,7 @@ describe("useWorkflowFiles", () => {
       wrapper: ({ children }) => (
         <MockRepositoryProvider
           repository={{
+            fetchBranches: vi.fn(() => Promise.resolve(response)),
             fetchWorkflowFiles: vi.fn(() => Promise.resolve(["sample.yaml"])),
           }}
         >
@@ -55,14 +55,12 @@ describe("useWorkflowFiles", () => {
       ),
     })
 
-    await act(async () => {
-      await setTimeout(100)
-    })
-
-    expect(result.current).toStrictEqual({
-      error: undefined,
-      loading: false,
-      workflowFiles: ["sample.yaml"],
+    await waitFor(() => {
+      expect(result.current).toStrictEqual({
+        error: undefined,
+        loading: false,
+        workflowFiles: ["sample.yaml"],
+      })
     })
   })
 })

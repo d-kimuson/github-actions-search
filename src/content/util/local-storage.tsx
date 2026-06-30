@@ -1,16 +1,41 @@
-import { createContext, useContext } from "react"
-import type { FC, PropsWithChildren } from "react"
+import {
+  createContext,
+  type ComponentChildren,
+  type FunctionalComponent,
+} from "preact"
+import { useContext } from "preact/hooks"
 
-export type InjectableStorage = Pick<
-  Storage,
+export type Storage = Pick<
+  globalThis.Storage,
   "getItem" | "setItem" | "removeItem" | "clear"
 >
 
-export const inMemoryStorage = () => {
-  const store = new Map<string, string>()
+const LocalStorageContext = createContext<Storage>(localStorage)
 
+type LocalStorageProviderProps = {
+  children: ComponentChildren
+  storage?: Storage
+}
+
+export const LocalStorageProvider: FunctionalComponent<
+  LocalStorageProviderProps
+> = ({ children, storage = localStorage }) => {
+  return (
+    <LocalStorageContext.Provider value={storage}>
+      {children}
+    </LocalStorageContext.Provider>
+  )
+}
+
+export const useLocalStorage = () => {
+  const storage = useContext(LocalStorageContext)
+  return storage
+}
+
+export const inMemoryStorage = (): Storage => {
+  const store = new Map<string, string>()
   return {
-    getItem: (key: string) => store.get(key) ?? null,
+    getItem: (key) => store.get(key) ?? null,
     setItem: (key, value) => {
       store.set(key, value)
     },
@@ -20,24 +45,5 @@ export const inMemoryStorage = () => {
     clear: () => {
       store.clear()
     },
-  } satisfies InjectableStorage
-}
-
-const StorageContext = createContext<InjectableStorage>(inMemoryStorage())
-
-export const LocalStorageProvider: FC<
-  PropsWithChildren<{
-    storage?: InjectableStorage
-  }>
-> = ({ children, storage }) => {
-  return (
-    <StorageContext.Provider value={storage ?? localStorage}>
-      {children}
-    </StorageContext.Provider>
-  )
-}
-
-export const useLocalStorage = () => {
-  const storage = useContext(StorageContext)
-  return storage
+  }
 }

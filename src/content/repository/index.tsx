@@ -1,5 +1,9 @@
-import { createContext, useContext } from "react"
-import type { FC, PropsWithChildren } from "react"
+import {
+  createContext,
+  type ComponentChildren,
+  type FunctionalComponent,
+} from "preact"
+import { useContext } from "preact/hooks"
 import { fetchBranches } from "@/content/repository/branch"
 import { fetchWorkflowFiles } from "@/content/repository/workflow"
 
@@ -10,9 +14,15 @@ const defaultRepository = {
 
 export type Repository = typeof defaultRepository
 
-const RepositoryContext = createContext(defaultRepository)
+type ProviderProps = {
+  children: ComponentChildren
+}
 
-export const RepositoryProvider: FC<PropsWithChildren> = ({ children }) => {
+const RepositoryContext = createContext<Repository>(defaultRepository)
+
+export const RepositoryProvider: FunctionalComponent<ProviderProps> = ({
+  children,
+}) => {
   return (
     <RepositoryContext.Provider value={defaultRepository}>
       {children}
@@ -25,14 +35,13 @@ export const useRepository = () => {
   return repository
 }
 
-export const MockRepositoryProvider: FC<
-  PropsWithChildren<{
+export const MockRepositoryProvider: FunctionalComponent<
+  ProviderProps & {
     repository: Partial<Repository>
-  }>
+  }
 > = ({ children, repository }) => {
   return (
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    <RepositoryContext.Provider value={repository as Repository}>
+    <RepositoryContext.Provider value={{ ...defaultRepository, ...repository }}>
       {children}
     </RepositoryContext.Provider>
   )

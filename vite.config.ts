@@ -1,9 +1,9 @@
-import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
-import webExtension, { readJsonFile } from "vite-plugin-web-extension"
 import { resolve } from "node:path"
+import preact from "@preact/preset-vite"
+import { defineConfig } from "vite"
+import webExtension, { readJsonFile } from "vite-plugin-web-extension"
 
-function generateManifest() {
+const generateManifest = () => {
   const manifest = readJsonFile("./manifest.json")
   const pkg = readJsonFile("./package.json")
   return {
@@ -17,7 +17,7 @@ function generateManifest() {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    preact(),
     webExtension({
       manifest: generateManifest,
     }),

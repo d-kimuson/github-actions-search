@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.direnv
 *.local
 
 # Editor directories and files
@@ -32,7 +33,7 @@ dist-ssr
 .cspellcache
 
 # TypeScript
-tsconfig.app.tsbuildinfo
+*.tsbuildinfo
 /playwright-report/
 /blob-report/
 /playwright/.cache/

@@ -34,6 +34,9 @@ jobs:
       - name: lint
         run: pnpm lint
 
+      - name: build
+        run: pnpm build
+
   check_test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -44,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: ./.github/actions/setup_node

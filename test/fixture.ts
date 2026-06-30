@@ -5,7 +5,7 @@ export const test = base.extend<{
   context: BrowserContext
   extensionId: string
 }>({
-  // eslint-disable-next-line no-empty-pattern -- playwright が要求する書き方
+  // oxlint-disable-next-line no-empty-pattern -- playwright が要求する書き方
   context: async ({}, use) => {
     const pathToExtension = path.join(import.meta.dirname, "..", "dist")
     const context = await chromium.launchPersistentContext(
@@ -24,7 +24,15 @@ export const test = base.extend<{
   },
   extensionId: async ({ context }, use) => {
     const [background] = context.serviceWorkers()
-    const extensionId = background.url().split("/")[2]
+    if (!background) {
+      throw new Error("Extension background service worker was not found")
+    }
+
+    const extensionId = new URL(background.url()).host
+    if (!extensionId) {
+      throw new Error("Extension ID was not found")
+    }
+
     await use(extensionId)
   },
 })

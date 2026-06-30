@@ -1,6 +1,5 @@
-import { setTimeout } from "node:timers/promises"
-import { renderHook, act } from "@testing-library/react"
-import { describe, it, vi, expect } from "vitest"
+import { renderHook, waitFor } from "@testing-library/preact"
+import { describe, expect, it, vi } from "vitest"
 import type { BranchSearchResult } from "@/content/repository/branch"
 import { useDefaultBranch } from "@/content/hooks/use-default-branch"
 import { MockRepositoryProvider } from "@/content/repository"
@@ -55,14 +54,12 @@ describe("useDefaultBranch", () => {
       ),
     })
 
-    await act(async () => {
-      await setTimeout(100)
-    })
-
-    expect(result.current).toStrictEqual({
-      error: undefined,
-      loading: false,
-      defaultBranch: "main",
+    await waitFor(() => {
+      expect(result.current).toStrictEqual({
+        error: undefined,
+        loading: false,
+        defaultBranch: "main",
+      })
     })
   })
 })
