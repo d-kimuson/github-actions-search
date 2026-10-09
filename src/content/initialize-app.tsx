@@ -1,24 +1,32 @@
 import { render } from "preact"
 import type { Repository } from "../schema/repository"
 import { App } from "./App"
+import { findSidebarElement } from "./util/find-sidebar"
 
 const rootId = "crx-root"
 
 const getRepoKey = (repo: Repository) => `${repo.owner}/${repo.repo}`
 
-export const { initializeApp, cleanApp } = (() => {
+export const { initializeApp, cleanApp, isAppMounted } = (() => {
   let rootElement: HTMLDivElement | null = null
+
+  const unmount = () => {
+    if (rootElement === null) return
+
+    render(null, rootElement)
+    rootElement.remove()
+    rootElement = null
+  }
 
   return {
     initializeApp: (repo: Repository): boolean => {
-      const sidebarElement = Array.from(
-        document.querySelectorAll("h2, h3")
-      ).find((elm) => elm.textContent?.trim() === "Actions")?.parentElement
-        ?.parentElement
+      const sidebarElement = findSidebarElement(document)
 
-      if (!sidebarElement) {
-        console.debug("[github-actions-search] sidebar not found")
-        return false
+      if (!sidebarElement) return false
+
+      // GitHub 側の再描画で sidebar ごと差し替えられた場合は古い root を破棄する
+      if (rootElement !== null && !rootElement.isConnected) {
+        unmount()
       }
 
       const existingRoot = document.getElementById(rootId)
@@ -37,12 +45,8 @@ export const { initializeApp, cleanApp } = (() => {
       return true
     },
 
-    cleanApp: () => {
-      if (rootElement === null) return
+    cleanApp: unmount,
 
-      render(null, rootElement)
-      rootElement.remove()
-      rootElement = null
-    },
+    isAppMounted: (): boolean => rootElement?.isConnected === true,
   }
 })()
