@@ -4,9 +4,12 @@ import type { Repository } from "../schema/repository"
 import { App } from "./App"
 
 const mountRoot = (root: HTMLElement): boolean => {
-  // React UI (2026-10): <aside aria-label="Actions"> > ... > <nav aria-label="Actions workflows">
+  // React UI (2026-11): <aside aria-label="Actions"> > ... > <nav aria-label="Workflows">
+  // (previously "Actions workflows")
   const aside = document.querySelector('aside[aria-label="Actions"]')
-  const nav = aside?.querySelector('nav[aria-label="Actions workflows"]')
+  const nav = aside?.querySelector(
+    'nav[aria-label="Workflows"], nav[aria-label="Actions workflows"]'
+  )
   if (aside && nav) {
     // Insert outside the scrollable list container so the dropdown isn't clipped
     let anchor: Element = nav
